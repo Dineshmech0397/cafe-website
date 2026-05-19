@@ -1,0 +1,37 @@
+pipeline {
+    agent any
+
+    environment {
+        DEPLOY_DIR = "/var/www/html"
+    }
+
+    stages {
+
+        stage('Clone Code') {
+            steps {
+                git branch: 'dev',
+                url: 'https://github.com/Dineshmech0397/cafe-website.git'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh '''
+                sudo rm -rf ${DEPLOY_DIR}/*
+                sudo cp -r * ${DEPLOY_DIR}/
+                '''
+            }
+        }
+
+    }
+
+    post {
+        success {
+            echo 'Deployment Successful'
+        }
+
+        failure {
+            echo 'Deployment Failed'
+        }
+    }
+}
